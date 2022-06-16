@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="calculator.svg" type="image/x-icon" />
     <title>Calculator</title>
     <!-- CSS -->
     <link rel="stylesheet" href="style.css" />
@@ -15,6 +16,11 @@
     <div class="container">
       <div id="sentence"></div>
       <div id="result"></div>
+      <div id="eraserDiv">
+        <button id="eraserBtn">
+          <img src="eraser.svg" alt="" id="eraser" />
+        </button>
+      </div>
 
       <div class="buttons">
         <button class="cancel" id="cancel" value="C" style="order: 1">C</button>
@@ -28,13 +34,13 @@
         <button class="operator" id="bporcent" value="%" style="order: 3">
           &percnt;
         </button>
-        <button class="operator" id="bdivide" value="/" style="order: 4">
+        <button class="operator" id="bdivide" value="&divide;" style="order: 4">
           &divide;
         </button>
-        <button class="operator" id="btimes" value="*" style="order: 8">
+        <button class="operator" id="btimes" value="&times;" style="order: 8">
           &times;
         </button>
-        <button class="operator" id="bminus" value="-" style="order: 12">
+        <button class="operator" id="bminus" value="&minus;" style="order: 12">
           &minus;
         </button>
         <button class="operator" id="bplus" value="+" style="order: 16">

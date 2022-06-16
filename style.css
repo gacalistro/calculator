@@ -16,6 +16,13 @@ body {
   place-items: center;
 
   overflow: hidden;
+
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  border: none;
+  background: none;
 }
 
 .container {
@@ -38,44 +45,56 @@ body {
   opacity: 0.6;
 }
 
+#eraserDiv {
+  display: flex;
+  justify-content: end;
+
+  width: 100%;
+
+  margin-bottom: 2rem;
+}
+
+#eraserBtn.disable {
+  opacity: 0.6;
+}
+
 .buttons {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 0.6rem;
 }
 
-button {
+.buttons button {
   font-size: 2.8rem;
 
   display: inline-block;
   padding: 2rem;
 
-  border: none;
   background-color: rgb(216, 216, 216);
   clip-path: circle();
 
   transition: 150ms;
 }
 
-button.clicked {
+.buttons button.clicked {
   background-color: rgba(216, 216, 216, 0.7);
   font-size: 2.2rem;
 }
 
-button.equals.clicked {
+.buttons button.equals.clicked {
   background-color: rgba(0, 128, 0, 0.8);
 }
 
-.cancel {
+.buttons .cancel {
   color: red;
 }
 
-.operator,
-.par {
+.buttons .operator,
+.buttons .par {
   color: green;
 }
 
-.equals {
+.buttons .equals {
   color: white;
   background-color: green;
 }
@@ -97,15 +116,15 @@ body.alert::after {
 }
 
 @media (max-width: 375px) {
-  button {
+  .buttons {
+    gap: 0.4rem;
+  }
+
+  .buttons button {
     font-size: 2rem;
   }
 
-  button.clicked {
+  .buttons button.clicked {
     font-size: 1.4rem;
-  }
-
-  .buttons {
-    gap: 0.4rem;
   }
 }
