@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calculator</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css" />
+    <!-- JS -->
+    <script defer src="main.js"></script>
+  </head>
+
+  <body>
+    <div class="container">
+      <div id="sentence"></div>
+      <div id="result"></div>
+
+      <div class="buttons">
+        <button class="cancel" id="cancel" value="C" style="order: 1">C</button>
+        <button class="par" id="par" value="()" style="order: 2">
+          &lpar;&rpar;
+        </button>
+        <button value="." id="dot" style="order: 19">&dot;</button>
+        <button value="+/-" id="pm" style="order: 17">&pm;</button>
+
+        <!-- OPERATORS -->
+        <button class="operator" id="bporcent" value="%" style="order: 3">
+          &percnt;
+        </button>
+        <button class="operator" id="bdivide" value="/" style="order: 4">
+          &divide;
+        </button>
+        <button class="operator" id="btimes" value="*" style="order: 8">
+          &times;
+        </button>
+        <button class="operator" id="bminus" value="-" style="order: 12">
+          &minus;
+        </button>
+        <button class="operator" id="bplus" value="+" style="order: 16">
+          &plus;
+        </button>
+        <button class="equals" id="bequals" value="=" style="order: 20">
+          &equals;
+        </button>
+
+        <!-- NUMBERS -->
+        <button id="b0" value="0" style="order: 18">0</button>
+        <button id="b1" value="1" style="order: 13">1</button>
+        <button id="b2" value="2" style="order: 14">2</button>
+        <button id="b3" value="3" style="order: 15">3</button>
+        <button id="b4" value="4" style="order: 9">4</button>
+        <button id="b5" value="5" style="order: 10">5</button>
+        <button id="b6" value="6" style="order: 11">6</button>
+        <button id="b7" value="7" style="order: 5">7</button>
+        <button id="b8" value="8" style="order: 6">8</button>
+        <button id="b9" value="9" style="order: 7">9</button>
+      </div>
+    </div>
+  </body>
+</html>
