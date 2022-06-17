@@ -2,6 +2,12 @@
   font-size: 62.5%;
 }
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 html,
 body {
   width: 100%;
@@ -26,7 +32,8 @@ button {
 }
 
 .container {
-  width: min(300px, 80%);
+  width: min(350px, 85%);
+  overflow: hidden;
 }
 
 #sentence,
@@ -35,13 +42,35 @@ button {
   width: 100%;
 
   text-align: right;
-  font-size: 2.8rem;
-  overflow: hidden;
 
   margin-bottom: 2rem;
 }
 
+#sentence {
+  font-size: 3.4rem;
+  overflow-x: scroll;
+  height: 5rem;
+  user-select: none;
+}
+
+#sentence::-webkit-scrollbar {
+  height: 0.6rem;
+}
+
+#sentence::-webkit-scrollbar-track {
+  background: white;
+}
+
+#sentence::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+#sentence::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.6);
+}
+
 #result {
+  font-size: 2.8rem;
   opacity: 0.6;
 }
 
@@ -61,7 +90,9 @@ button {
 .buttons {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 0.6rem;
+  gap: 2%;
+
+  margin-bottom: 4rem;
 }
 
 .buttons button {

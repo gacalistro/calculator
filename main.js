@@ -5,7 +5,8 @@ window.addEventListener("click", eraserBtnDisableToggleClass);
 // GLOBAL VARIABLES
 let operators = [],
   closingCount = 0,
-  hasNumberBetween;
+  hasNumberBetween,
+  equalsClicked;
 
 // MANIPULATING ALL BUTTONS
 document.querySelectorAll("button").forEach((btn) => {
@@ -34,22 +35,27 @@ function clicked(btn) {
   switch (btn.id) {
     case "cancel": {
       clear();
+      equalsClicked = false;
       break;
     }
     case "bequals": {
       equals();
+      equalsClicked = true;
       break;
     }
     case "pm": {
-      console.log("pm");
+      pm();
+      equalsClicked = false;
       break;
     }
     case "par": {
       par();
+      equalsClicked = false;
       break;
     }
     case "eraser": {
       eraser();
+      equalsClicked = false;
       break;
     }
     default: {
@@ -57,6 +63,9 @@ function clicked(btn) {
       break;
     }
   }
+
+  // AUTO SCROLL TO RIGTH
+  sentence.scrollLeft += sentence.scrollWidth;
 }
 
 // EFFECT ON BUTTON CLICKED
@@ -78,7 +87,13 @@ function warning() {
 
 // RETURNS THE SEQUENCES OF NUMBERS OF THE MATH EXPRESSION
 function sequenceArray() {
-  return sentence.innerHTML.split(regExOperators);
+  let expressionTemp = sentence.innerHTML.replaceAll(/\(|\)/g, "");
+  return expressionTemp.split(regExOperators);
+}
+
+function lastNumberSequenceOfArray() {
+  const numberSequenceArray = sequenceArray();
+  return numberSequenceArray[numberSequenceArray.length - 1];
 }
 
 // CLEAR ALL
@@ -86,6 +101,129 @@ function clear() {
   sentence.innerHTML = "";
   result.innerHTML = "";
   closingCount = 0;
+}
+
+// DISPLAY THE FINAL RESULT
+function equals() {
+  const numberSequenceArray = sequenceArray();
+
+  closingCount = 0;
+
+  if (
+    numberSequenceArray.length > 1 &&
+    numberSequenceArray[numberSequenceArray.length - 1] != ""
+  ) {
+    sentence.innerHTML = decimalAdjust("round", result.innerHTML, -1);
+    sentence.style.color = "green";
+    sentence.style.transition = "color 200ms";
+    setTimeout(() => {
+      sentence.style.color = "black";
+    }, 400);
+    result.innerHTML = "";
+  }
+}
+
+function pm() {
+  let expressionTemp = sentence.innerHTML;
+  let lastElement = expressionTemp[expressionTemp.length - 1];
+  const lastNumberSequence = lastNumberSequenceOfArray();
+
+  // TURNS NEGATIVE THE FIRST SEQUENCE
+  if (expressionTemp.length == lastNumberSequence.length) {
+    expressionTemp = `(−${expressionTemp}`;
+    sentence.innerHTML = expressionTemp;
+    closingCount++;
+    if (expressionTemp.length > 2) {
+      calculate(expressionTemp);
+    }
+    return;
+  }
+
+  // LOGIC CONDITIONS TO IDENTIFY IF ITS NEGATIVE
+  const elementBeforeLastNumberSequence =
+    expressionTemp.length - lastNumberSequence.length;
+  const itsNegative =
+    expressionTemp.slice(
+      elementBeforeLastNumberSequence - 2,
+      elementBeforeLastNumberSequence
+    ) == "(−";
+
+  // TURNS NEGATIVE AFTER OPERATOR
+  if (regExOperators.test(lastElement) && !itsNegative) {
+    sentence.innerHTML = expressionTemp.concat("(−");
+    closingCount++;
+    return;
+  }
+
+  // TURNS NEGATIVE ANY SEQUENCE NUMBER AFTER THE FIRST ONE
+  if (!itsNegative && (regExNumber.test(lastElement) || lastElement == "(")) {
+    expressionTemp = expressionTemp.split("");
+    expressionTemp.splice(elementBeforeLastNumberSequence, 0, "(−");
+    sentence.innerHTML = expressionTemp.join("");
+    closingCount++;
+    return;
+  }
+
+  // VERIFY IF LAST NUMBER SEQUENCE IF NEGATIVE AND TRANFORM IN POSITIVE
+  if (itsNegative) {
+    let beforeNegative = expressionTemp.slice(
+      0,
+      elementBeforeLastNumberSequence - 2
+    );
+    let afterNegative = expressionTemp.slice(
+      elementBeforeLastNumberSequence,
+      expressionTemp.length
+    );
+
+    expressionTemp = sentence.innerHTML = `${beforeNegative}${afterNegative}`;
+    closingCount--;
+    if (expressionTemp != "" && regExNumber.test(lastElement)) {
+      calculate(expressionTemp);
+    }
+  }
+}
+
+// ADDS BRACKETS
+function par() {
+  let expressionTemp = sentence.innerHTML;
+
+  let parLCount = expressionTemp.split("").filter((e) => e == "(").length;
+
+  const lastElement = expressionTemp[expressionTemp.length - 1];
+  const itsNumber = regExNumber.test(lastElement);
+
+  if (closingCount > 0 && itsNumber) {
+    hasNumberBetween = true;
+  }
+  if (closingCount == 0) {
+    hasNumberBetween = false;
+  }
+
+  if (parLCount == 0 || !hasNumberBetween) {
+    parL(itsNumber, lastElement);
+    return;
+  }
+
+  if (hasNumberBetween && closingCount > 0) {
+    parR();
+    calculate(sentence.innerHTML);
+    return;
+  }
+}
+
+// ADD LEFT BRACKET
+function parL(itsNumber, lastElement) {
+  if (lastElement == ".") {
+    sentence.innerHTML += "0×";
+  }
+  closingCount++;
+  sentence.innerHTML += itsNumber || lastElement == ")" ? "×(" : "(";
+}
+
+// ADD RIGHT BRACKET
+function parR() {
+  sentence.innerHTML += ")";
+  closingCount--;
 }
 
 // ERASE THE LAST ELEMENT
@@ -107,6 +245,13 @@ function eraser() {
   }
 
   sentence.innerHTML = tempSentence;
+  if (regExNumber.test(lastElement)) {
+    calculate(sentence.innerHTML);
+  }
+
+  if (sentence.innerHTML.length == 0) {
+    result.innerHTML = "";
+  }
 }
 
 // ENABLE OR DISABLE ERASER BUTTON WHEN NOTHING IS WRITTEN
@@ -120,77 +265,37 @@ function eraserBtnDisableToggleClass() {
   }
 }
 
-// ADDS BRACKETS
-function par() {
-  let expressionTemp = sentence.innerHTML;
-
-  let parLCount = expressionTemp.split("").filter((e) => e == "(").length;
-
-  const lastElement = expressionTemp[expressionTemp.length - 1];
-  const itsNumber = regExNumber.test(lastElement);
-
-  if (closingCount > 0 && itsNumber) {
-    hasNumberBetween = true;
-  }
-  if (closingCount == 0) {
-    hasNumberBetween = false;
-  }
-
-  if (parLCount == 0 || !hasNumberBetween) {
-    parL();
-    return;
-  }
-
-  if (hasNumberBetween && closingCount > 0) {
-    parR();
-    calculate(sentence.innerHTML);
-    return;
-  }
-}
-
-// ADD LEFT BRACKET
-function parL() {
-  closingCount++;
-  sentence.innerHTML += "(";
-}
-
-// ADD RIGHT BRACKET
-function parR() {
-  sentence.innerHTML += ")";
-  closingCount--;
-}
-
-// DISPLAY THE FINAL RESULT
-function equals() {
-  const numberSequenceArray = sequenceArray();
-
-  if (
-    numberSequenceArray.length > 1 &&
-    numberSequenceArray[numberSequenceArray.length - 1] != ""
-  ) {
-    sentence.innerHTML = decimalAdjust("round", result.innerHTML, -1);
-    sentence.style.color = "green";
-    sentence.style.transition = "color 200ms";
-    setTimeout(() => {
-      sentence.style.color = "black";
-    }, 400);
-    result.innerHTML = "";
-  }
-}
-
 // FUNCTION RESPONSIBLE FOR ALL THE OPERATORS
 function expression(btn) {
   // GET MATH EXPRESSION
   let expression = sentence.innerHTML;
   const operatorBtn = btn.classList.contains("operator");
+  const dotBtn = btn.id == "dot";
 
   // GET LAST ELEMENT OF THE EXPRESSION
-  const lastElement = expression[expression.length - 1];
+  let lastElement = expression[expression.length - 1];
+
+  // VERIFY IF ANY BUTTON THAN A NUMBER IS CLICKED AND LAST ELEMENT IS A DOT TO ADD A ZERO
+  if (lastElement == "." && !regExNumber.test(btn.value)) {
+    expression += "0";
+    lastElement = "0";
+  }
+
+  // VERIFY IF ITS A DOT BUTTON CLICKED AND ITS THE FIRST ELEMENT OF THE EXPRESSION
+  if (dotBtn && expression.length == 0) {
+    expression = "0.";
+    sentence.innerHTML = expression;
+    return;
+  }
+
+  // ADDS A ZERO AFTER ANY DOT TO START ANY OPERATION
+  if (dotBtn && regExOperators.test(lastElement)) {
+    expression += "0";
+    lastElement = "0";
+  }
 
   // GET LAST NUMBER SEQUENCE OF THE EXPRESSION
-  const numberSequenceArray = sequenceArray();
-  const lastNumberSequence =
-    numberSequenceArray[numberSequenceArray.length - 1];
+  let lastNumberSequence = lastNumberSequenceOfArray();
 
   // REGEX THAT CHECKS IF THE LAST NUMBER SEQUENCE HAS A DOT
   const regExDot = /\./;
@@ -198,6 +303,14 @@ function expression(btn) {
 
   // REGEX THAT CHECKS IF THE LAST ELEMENT IS A NUMBER
   const itsNumber = regExNumber.test(lastElement);
+
+  // VERIFY IF THE EXPRESSION IS BEING MADE AFTER EQUALS CLICK
+  if (equalsClicked && regExNumber.test(btn.value)) {
+    expression = "";
+    closingCount = 0;
+  }
+
+  equalsClicked = false;
 
   // IF ITS AN OPERATOR, RESULT IS CLEANED
   if (operatorBtn) {
@@ -212,8 +325,10 @@ function expression(btn) {
 
   // VERIFY IF THE BUTTON CLICKED AND THE LAST ELEMENT ARE OPERATORS AND CHANGE IT IF ITS DIFFERENT
   if (operatorBtn && regExOperators.test(lastElement)) {
+    if (expression[expression.length - 2] == "(" && !/−|\+/.test(btn.value)) {
+      return;
+    }
     expression = expression.slice(0, -1).concat(btn.value);
-    // .replace(btn.value, (s) => `<span>${s}</span>`);
     sentence.innerHTML = expression;
     return;
   }
@@ -221,7 +336,10 @@ function expression(btn) {
   // VERIFY IF BUTTON CLICKED IS AN OPERATOR AND ITS NOT FOLLOWED BY A NUMBER
   if (operatorBtn && lastElement != ")") {
     if (operatorBtn && !itsNumber) {
-      return;
+      // IF THE LAST VALUE ITS A LEFT BRACKET AND THE BTN VALUE ITS A MINUS OR PLUS SIGN, IT WILL PASS, OTHERWISE, IT WILL RETURN
+      if (!(/−|\+/.test(btn.value) && lastElement == "(")) {
+        return;
+      }
     }
   }
 
@@ -230,12 +348,26 @@ function expression(btn) {
     return;
   }
 
+  // VERIFY IF LAST ELEMENT IS A CLOSING BRACKET AND ITS NOT AN OPERATOR, THEN ADDS A MULTIPLICATION SIGN
+  if (lastElement == ")" && !operatorBtn) {
+    expression += "×";
+  }
+
   // UPDATE EXPRESSION VALUE
   expression += btn.value;
   sentence.innerHTML = expression;
 
   // SHOWS A PREVIEW OF THE RESULT
   if (regExOperators.test(expression) && !operatorBtn) {
+    calculate(expression);
+  }
+
+  lastNumberSequence = lastNumberSequenceOfArray();
+
+  if (
+    lastNumberSequence.length == expression.length &&
+    regExNumber.test(btn.value)
+  ) {
     calculate(expression);
   }
 }
