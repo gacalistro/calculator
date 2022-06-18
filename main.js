@@ -152,6 +152,7 @@ function pm() {
   if (regExOperators.test(lastElement) && !itsNegative) {
     sentence.innerHTML = expressionTemp.concat("(−");
     closingCount++;
+    calculate(sentence.innerHTML);
     return;
   }
 
@@ -161,6 +162,7 @@ function pm() {
     expressionTemp.splice(elementBeforeLastNumberSequence, 0, "(−");
     sentence.innerHTML = expressionTemp.join("");
     closingCount++;
+    calculate(sentence.innerHTML);
     return;
   }
 
@@ -178,6 +180,10 @@ function pm() {
     expressionTemp = sentence.innerHTML = `${beforeNegative}${afterNegative}`;
     closingCount--;
     if (expressionTemp != "" && regExNumber.test(lastElement)) {
+      if (lastNumberSequenceOfArray().length == expressionTemp.length) {
+        result.innerHTML = "";
+        return;
+      }
       calculate(expressionTemp);
     }
   }
@@ -245,6 +251,12 @@ function eraser() {
   }
 
   sentence.innerHTML = tempSentence;
+
+  if (sequenceArray().length == 1) {
+    result.innerHTML = "";
+    return;
+  }
+
   if (regExNumber.test(lastElement)) {
     calculate(sentence.innerHTML);
   }
@@ -359,15 +371,6 @@ function expression(btn) {
 
   // SHOWS A PREVIEW OF THE RESULT
   if (regExOperators.test(expression) && !operatorBtn) {
-    calculate(expression);
-  }
-
-  lastNumberSequence = lastNumberSequenceOfArray();
-
-  if (
-    lastNumberSequence.length == expression.length &&
-    regExNumber.test(btn.value)
-  ) {
     calculate(expression);
   }
 }
