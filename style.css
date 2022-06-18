@@ -1,7 +1,13 @@
+/* GENERAL SETTINGS */
 :root {
   font-size: 62.5%;
+  --hue: 120;
+  --dark: #191a19;
+  --primary: hsl(var(--hue), 100%, 25%);
+  --primary-bg: hsla(var(--hue), 100%, 25%, 0.8);
 }
 
+/* RESET */
 * {
   margin: 0;
   padding: 0;
@@ -14,6 +20,15 @@ body {
   height: 100%;
 }
 
+/* CALCULATOR ====================================== */
+body,
+button,
+#sentence::-webkit-scrollbar-track,
+#sentence::-webkit-scrollbar-thumb,
+#sentence::-webkit-scrollbar-thumb:hover {
+  transition: 300ms;
+}
+
 body {
   font-size: 1.6rem;
   font-family: sans-serif;
@@ -24,6 +39,22 @@ body {
   overflow: hidden;
 
   -webkit-tap-highlight-color: transparent;
+}
+
+body.alert::after {
+  content: "Não é possível mais de 15 dígitos";
+
+  width: fit-content;
+  padding: 1.4rem;
+
+  position: absolute;
+  bottom: 20%;
+
+  border-radius: 4rem;
+  background-color: rgba(0, 0, 0, 0.8);
+
+  font-size: 1.4rem;
+  color: white;
 }
 
 button {
@@ -48,7 +79,7 @@ button {
 
 #sentence {
   font-size: 3.4rem;
-  overflow-x: scroll;
+  overflow-x: auto;
   height: 5rem;
   user-select: none;
 }
@@ -74,11 +105,14 @@ button {
   opacity: 0.6;
 }
 
-#eraserDiv {
+#featureDiv {
   display: flex;
-  justify-content: end;
+  align-items: center;
+  justify-content: space-between;
 
   width: 100%;
+
+  padding: 1rem;
 
   margin-bottom: 2rem;
 }
@@ -101,19 +135,19 @@ button {
   display: inline-block;
   padding: 2rem;
 
-  background-color: rgb(216, 216, 216);
+  background-color: rgba(128, 128, 128, 0.12);
   clip-path: circle();
 
   transition: 150ms;
 }
 
 .buttons button.clicked {
-  background-color: rgba(216, 216, 216, 0.7);
+  background-color: rgba(128, 128, 128, 0.5);
   font-size: 2.2rem;
 }
 
 .buttons button.equals.clicked {
-  background-color: rgba(0, 128, 0, 0.8);
+  background-color: var(--primary-bg);
 }
 
 .buttons .cancel {
@@ -122,29 +156,38 @@ button {
 
 .buttons .operator,
 .buttons .par {
-  color: green;
+  color: var(--primary);
 }
 
 .buttons .equals {
   color: white;
-  background-color: green;
+  background-color: var(--primary);
 }
 
-body.alert::after {
-  content: "Não é possível mais de 15 dígitos";
+/* DARK THEME ====================================== */
 
-  width: fit-content;
-  padding: 1.4rem;
-
-  position: absolute;
-  bottom: 20%;
-
-  border-radius: 4rem;
-  background-color: rgba(0, 0, 0, 0.8);
-
-  font-size: 1.4rem;
+body.dark {
+  background-color: var(--dark);
   color: white;
 }
+
+body.dark button {
+  color: white;
+}
+
+body.dark #sentence::-webkit-scrollbar-track {
+  background: var(--dark);
+}
+
+body.dark #sentence::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+body.dark #sentence::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+/* RESPONSIVE ====================================== */
 
 @media (max-width: 375px) {
   .buttons {

@@ -58,6 +58,12 @@ function clicked(btn) {
       equalsClicked = false;
       break;
     }
+    case "themeSwitch":
+    case "themeSwitchSvg":
+    case "themeSwitchPath": {
+      themeSwitch();
+      break;
+    }
     default: {
       expression(btn);
       break;
@@ -415,4 +421,12 @@ function decimalAdjust(type, value, exp) {
 // CALCULATE
 function calculate(expressionTemp) {
   result.innerHTML = eval(changingSigns(expressionTemp.concat(closeAllPar())));
+}
+
+function themeSwitch() {
+  if (document.body.classList.contains("dark")) {
+    document.body.classList.remove("dark");
+  } else {
+    document.body.classList.add("dark");
+  }
 }
