@@ -79,9 +79,17 @@ button {
 
 #sentence {
   font-size: 3.4rem;
-  overflow-x: auto;
+
   height: 5rem;
+
+  overflow-x: auto;
   user-select: none;
+
+  transition: color 200ms;
+}
+
+#sentence.equalsEffect {
+  color: var(--primary);
 }
 
 #sentence::-webkit-scrollbar {

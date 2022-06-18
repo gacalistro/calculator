@@ -1,5 +1,5 @@
 <p align="center">
-  <img alt="Exemplo da Calculadora" src="https://i.imgur.com/7ANb4gv.png" width="90%">
+  <img alt="Exemplo da Calculadora" src="https://i.imgur.com/5lHFD0q.png" width="90%">
 </p>
 
 ## <img src="https://cdn-icons-png.flaticon.com/512/922/922656.png" height="30px" width="30px"/> Technologies
@@ -15,6 +15,8 @@ The project has been developed with these technologies:
 A simple calculator made with HTML, CSS and JS
 
 This project was developed entirely by me, comparing my ideias with my phone calculator functionalities and bugs found by my friends Lima and Raphael.
+
+And it has a dark theme.
 
 ## <img src="https://cdn-icons-png.flaticon.com/512/922/922690.png" height="25px" width="25px"/> License
 

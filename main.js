@@ -120,10 +120,9 @@ function equals() {
     numberSequenceArray[numberSequenceArray.length - 1] != ""
   ) {
     sentence.innerHTML = decimalAdjust("round", result.innerHTML, -1);
-    sentence.style.color = "green";
-    sentence.style.transition = "color 200ms";
+    sentence.classList.add("equalsEffect");
     setTimeout(() => {
-      sentence.style.color = "black";
+      sentence.classList.remove("equalsEffect");
     }, 400);
     result.innerHTML = "";
   }
