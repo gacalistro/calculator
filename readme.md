@@ -18,6 +18,8 @@ This project was developed entirely by me, comparing my ideias with my phone cal
 
 And it has a dark theme.
 
+- [Take a look on my project](https://gahcalistro.github.io/calculator/)
+
 ## <img src="https://cdn-icons-png.flaticon.com/512/922/922690.png" height="25px" width="25px"/> License
 
 This project is [MIT licensed](LICENSE).
